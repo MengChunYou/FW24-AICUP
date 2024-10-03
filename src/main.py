@@ -44,13 +44,20 @@ def parsing_args() -> ArgumentParser:
 
 if __name__ == "__main__":
     if not os.path.exists('data/train_data'):
-        DRIVE_URL = "https://drive.google.com/drive/folders/1EwByrnWjyS5ruG3FxWRjEDoi0dsrqKUA?usp=sharing"
-        gdown.download_folder(DRIVE_URL, 'data/train_data', quiet=False)
+        # DRIVE_URL = "https://drive.google.com/drive/folders/1kHrZoon_ODVKzEBNLwLSTpeGGAwWWQOE?usp=sharing"
+        # gdown.download_folder(DRIVE_URL, 'data/train_data', quiet=False)
+        gdown.download_folder(id="1kHrZoon_ODVKzEBNLwLSTpeGGAwWWQOE", output="data/train_data", quiet=False)
 
     args = parsing_args()
     xgb_config = load_yaml("config/xgb.yml")
+    
+    # 
     data = load_data(args.folder_path).sort_values("LocationCode", ascending=True).iloc[:10000, :]
     data['DateTime'] = date_time_transfer(data['DateTime'])
+    print(data.head())
+    
+    
+
     x_train, y_train, x_test, y_test = split(data, "Power(mW)", 0.2)
 
     if args.is_valid:
